@@ -12,10 +12,11 @@ data class Movie(@SerializedName("id") val id : Int,
                  @SerializedName("release_date") val releaseDate : String,
                  @SerializedName("popularity") val popularity : Double,
                  @SerializedName("vote_average") val averageScore : Double,
-                 @SerializedName("genres") val genreList: List<Genre>
+                 @SerializedName("genres") val genreList: List<Genre>?
                  ) {
 
     fun getMovieGenres() : String {
+        if (genreList == null) return ""
         var genres = "("
         genreList.forEach {
             genres = genres.plus('/' + it.name)
