@@ -28,7 +28,8 @@ interface TmdbService {
     @GET("movie/{id}")
     fun movieDetail(
         @Path("id") id : Int,
-        @Query("api_key") apiKey: String
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String
     ) : Call<MovieDetail>
 
     @GET("genre/movie/list")

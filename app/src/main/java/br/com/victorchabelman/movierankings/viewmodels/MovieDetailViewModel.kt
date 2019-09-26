@@ -17,7 +17,7 @@ class MovieDetailViewModel : ViewModel() {
     fun loadMovie(id : Int) {
         val tmdbService = RetrofitUtils.retrofitInstance.create(TmdbService::class.java)
 
-        tmdbService.movieDetail(id, API_KEY).enqueue(object : Callback<MovieDetail> {
+        tmdbService.movieDetail(id, API_KEY, "pt-BR").enqueue(object : Callback<MovieDetail> {
             override fun onFailure(call: Call<MovieDetail>, t: Throwable) {
                 Log.e("VGC", t.message)
             }

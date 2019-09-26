@@ -1,6 +1,8 @@
 package br.com.victorchabelman.movierankings.activities
 
 import android.os.Bundle
+import android.os.Handler
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -12,9 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var movieAdapter : MovieAdapter
-    private lateinit var movieViewModel : MovieViewModel ;
-
-    private var currentPage = 1
+    private lateinit var movieViewModel : MovieViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +33,9 @@ class MainActivity : AppCompatActivity() {
         movieList.adapter = movieAdapter
         movieList.addOnScrollListener(scrollListener())
 
-        movieViewModel.loadPopularMovies(currentPage)
+        movieViewModel.loadPopularMovies()
+
+        sv_movies.setOnQueryTextListener(movieSearchListener())
     }
 
     private fun scrollListener() : RecyclerView.OnScrollListener {
@@ -43,9 +45,35 @@ class MainActivity : AppCompatActivity() {
 
                 if (!recyclerView.canScrollVertically(1) &&
                     newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    currentPage++
-                    movieViewModel.loadPopularMovies(currentPage)
+                    movieViewModel.updatePage()
+                    movieViewModel.loadPopularMovies()
                 }
+            }
+        }
+    }
+
+    private fun movieSearchListener() : SearchView.OnQueryTextListener {
+        return object : SearchView.OnQueryTextListener {
+            val handler = Handler()
+            var runnable = Runnable {
+            }
+
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                //TODO
+                return true
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                if (p0 != null && p0.isBlank()) return true
+                
+                handler.removeCallbacks(runnable)
+
+                runnable = Runnable {
+                    onQueryTextSubmit(p0)
+                }
+
+                handler.postDelayed(runnable, 3000)
+                return false
             }
         }
     }

@@ -22,6 +22,8 @@ class MovieViewModel : ViewModel() {
     val movies = MutableLiveData<List<Movie>>()
     val genres = ArrayList<Genre>()
 
+    private var currentPage = 1
+
     fun loadMovies() {
         val tmdbService = RetrofitUtils.retrofitInstance.create(TmdbService::class.java)
 
@@ -63,10 +65,14 @@ class MovieViewModel : ViewModel() {
         })
     }
 
-    fun loadPopularMovies(page : Int) {
+    fun updatePage() {
+        currentPage++
+    }
+
+    fun loadPopularMovies() {
         val tmdbService = RetrofitUtils.retrofitInstance.create(TmdbService::class.java)
 
-        tmdbService.popularMovies(API_KEY, "pt-BR", page).enqueue(object : Callback<MovieListContainer> {
+        tmdbService.popularMovies(API_KEY, "pt-BR", currentPage).enqueue(object : Callback<MovieListContainer> {
             override fun onFailure(call: Call<MovieListContainer>, t: Throwable) {
                 Log.e("VGC", t.message)
             }
