@@ -1,6 +1,7 @@
 package br.com.victorchabelman.movierankings.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Movie(@SerializedName("id") val id : Int,
                  @SerializedName("title") val title : String,
@@ -11,18 +12,8 @@ data class Movie(@SerializedName("id") val id : Int,
                  @SerializedName("backdrop_path") val backdropPath : String,
                  @SerializedName("release_date") val releaseDate : String,
                  @SerializedName("popularity") val popularity : Double,
-                 @SerializedName("vote_average") val averageScore : Double,
-                 @SerializedName("genres") val genreList: List<Genre>?
-                 ) {
-
-    fun getMovieGenres() : String {
-        if (genreList == null) return ""
-        var genres = "("
-        genreList.forEach {
-            genres = genres.plus('/' + it.name)
-        }
-        return genres.plus(')')
-    }
+                 @SerializedName("vote_average") val averageScore : Double
+                 ) : Serializable {
 
     fun getBackgroundImage() : String {
         return "https://image.tmdb.org/t/p/w500$backdropPath"

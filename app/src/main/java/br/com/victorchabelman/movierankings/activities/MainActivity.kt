@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        movieAdapter = MovieAdapter()
+        movieAdapter = MovieAdapter(this)
 
         val movieViewModel = ViewModelProviders.of(this).get(MovieViewModel::class.java)
 

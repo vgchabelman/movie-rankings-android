@@ -1,5 +1,7 @@
 package br.com.victorchabelman.movierankings.model
 
-data class Genre(val id : Int,
-                 val name : String) {
+import com.google.gson.annotations.SerializedName
+
+data class Genre(@SerializedName("id") val id : Int,
+                 @SerializedName("name") val name : String) {
 }

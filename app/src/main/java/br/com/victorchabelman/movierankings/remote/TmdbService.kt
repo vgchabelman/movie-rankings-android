@@ -14,4 +14,11 @@ interface TmdbService {
         @Query("api_key") apiKey: String,
         @Query("language") language: String
     ): Call<MovieListContainer>
+
+    @GET("discover/movie?sort_by=popularity.desc")
+    fun popularMovies(
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String,
+        @Query("page") page : Int
+    ) : Call<MovieListContainer>
 }

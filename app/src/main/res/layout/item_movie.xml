@@ -13,7 +13,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp">
+        android:layout_height="270dp">
 
         <ImageView
             android:id="@+id/iv_movie_bg"
@@ -35,7 +35,6 @@
             android:shadowDy="2"
             android:shadowRadius="2"
             android:text="@{movie.title}"
-            android:textColor="@android:color/white"
             android:textSize="24sp"
             android:gravity="center"
             android:textStyle="bold"
@@ -52,8 +51,8 @@
             android:shadowDy="2"
             android:shadowRadius="2"
             android:text="@{movie.originalTitle}"
-            android:textColor="@android:color/white"
             android:textSize="16sp"
+            android:textStyle="italic"
             app:layout_constraintEnd_toStartOf="@+id/textView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
@@ -66,8 +65,7 @@
             android:layout_margin="16dp"
             android:background="@drawable/bg_popularity"
             android:gravity="center"
-            android:text="@{`` +movie.popularity}"
-            android:textColor="@android:color/white"
+            android:text="@{`` +movie.averageScore}"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,6 +80,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@{movie.title}"
             android:scaleType="centerCrop"
+            android:transitionName="poster"
             bind:imagePoster="@{movie.posterImage}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -96,8 +95,8 @@
             android:shadowColor="#000"
             android:shadowDy="2"
             android:shadowRadius="2"
-            android:text="@{movie.movieGenres}"
-            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:text="@{movie.tagline}"
             app:layout_constraintStart_toEndOf="@+id/iv_movie_poster"
             app:layout_constraintTop_toTopOf="@+id/iv_movie_poster"
             tools:text="@tools:sample/cities" />
@@ -111,8 +110,8 @@
             android:shadowColor="#000"
             android:shadowDy="2"
             android:shadowRadius="2"
+            android:maxLines="8"
             android:text="@{movie.overview}"
-            android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="@+id/iv_movie_poster"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_movie_poster"

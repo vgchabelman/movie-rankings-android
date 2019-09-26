@@ -1,14 +1,12 @@
 package br.com.victorchabelman.movierankings.util
 
+import android.graphics.drawable.BitmapDrawable
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import br.com.victorchabelman.movierankings.R
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import java.lang.Exception
 import com.vansuita.gaussianblur.GaussianBlur
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 
 
 @BindingAdapter("bind:imageBg")
@@ -37,7 +35,17 @@ fun loadPoster(view: ImageView, imageUrl: String) {
     Picasso.get()
         .load(imageUrl)
         .placeholder(R.drawable.generic_poster)
-        .noFade()
-        .resize(109, 163)
+//        .resize(218, 312)
+        .into(view)
+}
+
+@BindingAdapter("bind:imagePosterHQ")
+fun loadPosterHighQuality(view: ImageView, imageUrl: String) {
+    if (imageUrl.isEmpty()) return
+    Picasso.get()
+        .load(imageUrl)
+        .centerCrop()
+        .placeholder(R.drawable.generic_poster)
+        .resize(436, 652)
         .into(view)
 }
