@@ -1,8 +1,11 @@
 package br.com.victorchabelman.movierankings.remote
 
+import br.com.victorchabelman.movierankings.model.GenreListContainer
+import br.com.victorchabelman.movierankings.model.MovieDetail
 import br.com.victorchabelman.movierankings.model.MovieListContainer
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TmdbService {
@@ -21,4 +24,16 @@ interface TmdbService {
         @Query("language") language: String,
         @Query("page") page : Int
     ) : Call<MovieListContainer>
+
+    @GET("movie/{id}")
+    fun movieDetail(
+        @Path("id") id : Int,
+        @Query("api_key") apiKey: String
+    ) : Call<MovieDetail>
+
+    @GET("genre/movie/list")
+    fun genres(
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String
+    ) : Call<GenreListContainer>
 }

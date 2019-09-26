@@ -12,16 +12,17 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#AA000000">
+        android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:background="#AA000000">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true">
 
                 <ImageView
                     android:id="@+id/iv_movie_poster_xl"
@@ -37,10 +38,10 @@
                     android:id="@+id/tv_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
                     android:layout_marginTop="16dp"
                     android:gravity="center"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
                     android:shadowColor="#000"
                     android:shadowDy="2"
                     android:shadowRadius="2"
@@ -52,95 +53,11 @@
                     bind:layout_constraintTop_toTopOf="@id/iv_movie_poster_xl"
                     tools:text="@tools:sample/full_names" />
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Título original:"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    bind:layout_constraintStart_toStartOf="parent"
-                    bind:layout_constraintTop_toBottomOf="@+id/iv_movie_poster_xl" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="@{movie.originalTitle}"
-                    android:textSize="20sp"
-                    bind:layout_constraintBottom_toBottomOf="@id/textView4"
-                    bind:layout_constraintStart_toEndOf="@+id/textView4"
-                    tools:text="@tools:sample/cities" />
-
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Lançamento:"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    bind:layout_constraintStart_toStartOf="parent"
-                    bind:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="@{movie.releaseDate}"
-                    android:textSize="20sp"
-                    bind:layout_constraintBottom_toBottomOf="@+id/textView6"
-                    bind:layout_constraintStart_toEndOf="@+id/textView6"
-                    tools:text="@tools:sample/cities" />
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Tagline:"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    bind:layout_constraintStart_toStartOf="parent"
-                    bind:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="@{movie.tagline}"
-                    android:textSize="20sp"
-                    bind:layout_constraintBottom_toBottomOf="@id/textView5"
-                    bind:layout_constraintStart_toEndOf="@+id/textView5"
-                    tools:text="@tools:sample/cities" />
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Sinopse:"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    bind:layout_constraintStart_toStartOf="parent"
-                    bind:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-                <TextView
+                <FrameLayout
+                    android:id="@+id/cl_movie_detail_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:paddingBottom="16dp"
-                    android:text="@{movie.overview}"
-                    android:textSize="20sp"
-                    bind:layout_constraintTop_toBottomOf="@id/textView7"
-                    tools:text="@tools:sample/lorem/random" />
+                    bind:layout_constraintTop_toBottomOf="@+id/iv_movie_poster_xl" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

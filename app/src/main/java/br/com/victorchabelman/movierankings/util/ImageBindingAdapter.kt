@@ -1,6 +1,7 @@
 package br.com.victorchabelman.movierankings.util
 
 import android.graphics.drawable.BitmapDrawable
+import android.util.Log
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import br.com.victorchabelman.movierankings.R
@@ -24,7 +25,7 @@ fun loadBg(view: ImageView, imageUrl: String) {
             }
 
             override fun onError(e: Exception?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                Log.e("VGC", "" + e?.message)
             }
         })
 }
@@ -36,16 +37,5 @@ fun loadPoster(view: ImageView, imageUrl: String) {
         .load(imageUrl)
         .placeholder(R.drawable.generic_poster)
 //        .resize(218, 312)
-        .into(view)
-}
-
-@BindingAdapter("bind:imagePosterHQ")
-fun loadPosterHighQuality(view: ImageView, imageUrl: String) {
-    if (imageUrl.isEmpty()) return
-    Picasso.get()
-        .load(imageUrl)
-        .centerCrop()
-        .placeholder(R.drawable.generic_poster)
-        .resize(436, 652)
         .into(view)
 }

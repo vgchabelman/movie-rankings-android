@@ -43,6 +43,10 @@ class MovieAdapter(val activity: Activity) : RecyclerView.Adapter<MovieAdapter.V
 
     fun updateMovies(movies : List<Movie>) {
         movieList.clear()
+        addMovies(movies)
+    }
+
+    fun addMovies(movies : List<Movie>) {
         movieList.addAll(movies)
         notifyDataSetChanged()
     }
