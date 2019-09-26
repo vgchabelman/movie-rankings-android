@@ -22,19 +22,27 @@ interface TmdbService {
     fun popularMovies(
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
-        @Query("page") page : Int
-    ) : Call<MovieListContainer>
+        @Query("page") page: Int
+    ): Call<MovieListContainer>
 
     @GET("movie/{id}")
     fun movieDetail(
-        @Path("id") id : Int,
+        @Path("id") id: Int,
         @Query("api_key") apiKey: String,
         @Query("language") language: String
-    ) : Call<MovieDetail>
+    ): Call<MovieDetail>
+
+    @GET("search/movie")
+    fun searchMovies(
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String,
+        @Query("page") page: Int,
+        @Query("query") query: String
+    ): Call<MovieListContainer>
 
     @GET("genre/movie/list")
     fun genres(
         @Query("api_key") apiKey: String,
         @Query("language") language: String
-    ) : Call<GenreListContainer>
+    ): Call<GenreListContainer>
 }

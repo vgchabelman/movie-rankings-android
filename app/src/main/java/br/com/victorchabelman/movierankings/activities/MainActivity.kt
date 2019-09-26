@@ -13,8 +13,11 @@ import br.com.victorchabelman.movierankings.viewmodels.MovieViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var movieAdapter : MovieAdapter
-    private lateinit var movieViewModel : MovieViewModel
+    private lateinit var movieAdapter: MovieAdapter
+    private lateinit var movieViewModel: MovieViewModel
+
+    private var shouldClear = false
+    private var isSearching = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +30,11 @@ class MainActivity : AppCompatActivity() {
         movieViewModel.loadGenres()
 
         movieViewModel.movies.observe(this, Observer {
-            movieAdapter.addMovies(it!!)
+            if (shouldClear) {
+                movieAdapter.updateMovies(it!!)
+            } else {
+                movieAdapter.addMovies(it!!)
+            }
         })
 
         movieList.adapter = movieAdapter
@@ -38,34 +45,54 @@ class MainActivity : AppCompatActivity() {
         sv_movies.setOnQueryTextListener(movieSearchListener())
     }
 
-    private fun scrollListener() : RecyclerView.OnScrollListener {
+    private fun scrollListener(): RecyclerView.OnScrollListener {
         return object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
 
                 if (!recyclerView.canScrollVertically(1) &&
-                    newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    newState == RecyclerView.SCROLL_STATE_IDLE
+                ) {
+                    shouldClear = false
                     movieViewModel.updatePage()
-                    movieViewModel.loadPopularMovies()
+
+                    if (isSearching) {
+                        movieViewModel.searchMovies(sv_movies.query.toString())
+                    } else{
+                        movieViewModel.loadPopularMovies()
+                    }
                 }
             }
         }
     }
 
-    private fun movieSearchListener() : SearchView.OnQueryTextListener {
+    private fun movieSearchListener(): SearchView.OnQueryTextListener {
         return object : SearchView.OnQueryTextListener {
             val handler = Handler()
             var runnable = Runnable {
             }
 
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                //TODO
+                handler.removeCallbacks(runnable)
+                p0?.let {
+                    movieViewModel.clearPage()
+                    shouldClear = true
+
+                    if (p0.isBlank()) {
+                        isSearching = false
+                        movieViewModel.loadPopularMovies()
+                    } else {
+                        isSearching = true
+                        movieViewModel.searchMovies(it)
+                    }
+                    return true
+                }
                 return true
             }
 
             override fun onQueryTextChange(p0: String?): Boolean {
                 if (p0 != null && p0.isBlank()) return true
-                
+
                 handler.removeCallbacks(runnable)
 
                 runnable = Runnable {

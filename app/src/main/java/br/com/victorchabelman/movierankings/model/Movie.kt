@@ -31,7 +31,10 @@ data class Movie(@SerializedName("id") val id : Int,
             genreIds.forEach {
                 genreTexts = genreTexts.plus(genres[it]?.name + '/')
             }
-            genreTexts = genreTexts.substringBeforeLast('/').replace("null", "")
+            try {
+                genreTexts = genreTexts.substringBeforeLast('/').replace("null", "")
+            } catch (e: Exception) {
+            }
         }
     }
 }

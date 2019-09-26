@@ -9,13 +9,17 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.vansuita.gaussianblur.GaussianBlur
 
-
 @BindingAdapter("bind:imageBg")
 fun loadBg(view: ImageView, imageUrl: String) {
     if (imageUrl.isEmpty()) return
+
+    val drawable = view.resources.getDrawable(R.drawable.generic_movie_bg)
+    val blurredBitmap = GaussianBlur.with(view.context).render((drawable as BitmapDrawable).bitmap)
+    val d = BitmapDrawable(view.resources, blurredBitmap)
+
     Picasso.get()
         .load(imageUrl)
-        .placeholder(R.drawable.generic_movie_bg)
+        .placeholder(d)
         .noFade()
         .resize(500, 300)
         .into(view, object : Callback {
