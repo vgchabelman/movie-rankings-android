@@ -2,6 +2,7 @@ package br.com.victorchabelman.movierankings.activities
 
 import android.os.Bundle
 import android.os.Handler
+import android.view.animation.AnimationUtils
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -11,6 +12,7 @@ import br.com.victorchabelman.movierankings.R
 import br.com.victorchabelman.movierankings.adapters.MovieAdapter
 import br.com.victorchabelman.movierankings.viewmodels.MovieViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var movieAdapter: MovieAdapter
@@ -39,6 +41,8 @@ class MainActivity : AppCompatActivity() {
 
         movieList.adapter = movieAdapter
         movieList.addOnScrollListener(scrollListener())
+        val controller = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_fall_down)
+        movieList.layoutAnimation = controller
 
         movieViewModel.loadPopularMovies()
 
@@ -61,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                     } else{
                         movieViewModel.loadPopularMovies()
                     }
+                    recyclerView.scheduleLayoutAnimation()
                 }
             }
         }
