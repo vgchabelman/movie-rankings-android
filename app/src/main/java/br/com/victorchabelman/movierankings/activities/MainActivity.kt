@@ -12,6 +12,9 @@ import br.com.victorchabelman.movierankings.R
 import br.com.victorchabelman.movierankings.adapters.MovieAdapter
 import br.com.victorchabelman.movierankings.viewmodels.MovieViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import android.net.ConnectivityManager
+import android.content.Context
+import androidx.appcompat.app.AlertDialog
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +32,17 @@ class MainActivity : AppCompatActivity() {
         movieAdapter = MovieAdapter(this)
 
         movieViewModel = ViewModelProviders.of(this).get(MovieViewModel::class.java)
+        movieViewModel.noConnectionListener = object : MovieViewModel.INoConnectionWarn {
+            override fun onNoConnectionDetected() {
+                AlertDialog.Builder(this@MainActivity)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Nenhuma conexão detectada")
+                    .setMessage("Nenhuma conexão detectada\nPor favor, tente novamente em instantes")
+                    .create()
+                    .show()
+            }
+
+        }
         movieViewModel.loadGenres()
 
         movieViewModel.movies.observe(this, Observer {
@@ -44,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         val controller = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_fall_down)
         movieList.layoutAnimation = controller
 
-        movieViewModel.loadPopularMovies()
+        movieViewModel.loadPopularMovies(checkConnection())
 
         sv_movies.setOnQueryTextListener(movieSearchListener())
     }
@@ -61,9 +75,9 @@ class MainActivity : AppCompatActivity() {
                     movieViewModel.updatePage()
 
                     if (isSearching) {
-                        movieViewModel.searchMovies(sv_movies.query.toString())
+                        movieViewModel.searchMovies(sv_movies.query.toString(), checkConnection())
                     } else{
-                        movieViewModel.loadPopularMovies()
+                        movieViewModel.loadPopularMovies(checkConnection())
                     }
                     recyclerView.scheduleLayoutAnimation()
                 }
@@ -85,10 +99,10 @@ class MainActivity : AppCompatActivity() {
 
                     if (p0.isBlank()) {
                         isSearching = false
-                        movieViewModel.loadPopularMovies()
+                        movieViewModel.loadPopularMovies(checkConnection())
                     } else {
                         isSearching = true
-                        movieViewModel.searchMovies(it)
+                        movieViewModel.searchMovies(it, checkConnection())
                     }
 
                     movieList.smoothScrollToPosition(RecyclerView.SCROLLBAR_POSITION_DEFAULT)
@@ -110,5 +124,13 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
         }
+    }
+
+    fun checkConnection() :Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeInfo = connectivityManager.activeNetworkInfo
+
+        return activeInfo != null && activeInfo.isConnected
     }
 }

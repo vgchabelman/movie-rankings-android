@@ -5,18 +5,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import br.com.victorchabelman.movierankings.model.Genre
 import br.com.victorchabelman.movierankings.model.GenreListContainer
-import br.com.victorchabelman.movierankings.util.API_KEY
 import br.com.victorchabelman.movierankings.model.Movie
 import br.com.victorchabelman.movierankings.model.MovieListContainer
 import br.com.victorchabelman.movierankings.remote.TmdbService
+import br.com.victorchabelman.movierankings.util.API_KEY
 import br.com.victorchabelman.movierankings.util.RetrofitUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MovieViewModel : ViewModel() {
+class MovieViewModel() : ViewModel() {
     val movies = MutableLiveData<List<Movie>>()
     val genres = ArrayList<Genre>()
+    lateinit var noConnectionListener: INoConnectionWarn
 
     private var currentPage = 1
 
@@ -69,7 +70,12 @@ class MovieViewModel : ViewModel() {
         currentPage = 1
     }
 
-    fun loadPopularMovies() {
+    fun loadPopularMovies(hasConnection : Boolean) {
+        if (!hasConnection)  {
+            noConnectionListener.onNoConnectionDetected()
+            return
+        }
+
         val tmdbService = RetrofitUtils.retrofitInstance.create(TmdbService::class.java)
 
         tmdbService.popularMovies(API_KEY, "pt-BR", currentPage).enqueue(object : Callback<MovieListContainer> {
@@ -93,7 +99,12 @@ class MovieViewModel : ViewModel() {
         })
     }
 
-    fun searchMovies(query : String) {
+    fun searchMovies(query : String, hasConnection : Boolean) {
+        if (!hasConnection)  {
+            noConnectionListener.onNoConnectionDetected()
+            return
+        }
+
         val tmdbService = RetrofitUtils.retrofitInstance.create(TmdbService::class.java)
 
         tmdbService.searchMovies(API_KEY, "pt-BR", currentPage, query).enqueue(object  : Callback<MovieListContainer> {
@@ -115,5 +126,9 @@ class MovieViewModel : ViewModel() {
                 }
             }
         })
+    }
+
+    interface INoConnectionWarn {
+        fun onNoConnectionDetected()
     }
 }
