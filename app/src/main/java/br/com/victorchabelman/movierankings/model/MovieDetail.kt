@@ -10,6 +10,7 @@ data class MovieDetail(
     @SerializedName("budget") val budget: Long,
     @SerializedName("genres") val genreList: List<Genre>,
     @SerializedName("homepage") val homepage: String,
+    @SerializedName("imdb_id") val imdbId: String,
     @SerializedName("original_title") val originalTitle: String,
     @SerializedName("overview") val overview: String,
     @SerializedName("popularity") val popularity: Double,
@@ -17,19 +18,24 @@ data class MovieDetail(
     @SerializedName("production_companies") val companyList: List<ProductionCompany>,
     @SerializedName("release_date") val releaseDate: String,
     @SerializedName("title") val title: String,
-    @SerializedName("tagline") val tagline : String,
+    @SerializedName("tagline") val tagline: String,
     @SerializedName("vote_average") val averageScore: Double,
-    @SerializedName("vote_count") val voteCount: Int) {
+    @SerializedName("vote_count") val voteCount: Int
+) {
 
-    fun getBudgetFormatted() : String{
+    fun getBudgetFormatted(): String {
         return NumberFormat.getCurrencyInstance().format(budget)
     }
 
-    fun getGenreTexts() : String {
+    fun getGenreTexts(): String {
         var genreTexts = ""
         genreList.forEach {
             genreTexts = genreTexts.plus(it.name + '/')
         }
         return genreTexts.substringBeforeLast('/').replace("null", "")
+    }
+
+    fun getImdbUrl(): String {
+        return "https://www.imdb.com/title/$imdbId"
     }
 }

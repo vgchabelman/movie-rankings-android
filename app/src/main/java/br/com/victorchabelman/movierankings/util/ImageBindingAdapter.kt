@@ -20,7 +20,6 @@ fun loadBg(view: ImageView, imageUrl: String) {
     Picasso.get()
         .load(imageUrl)
         .placeholder(d)
-        .noFade()
         .resize(500, 300)
         .into(view, object : Callback {
             override fun onSuccess() {
@@ -41,5 +40,18 @@ fun loadPoster(view: ImageView, imageUrl: String) {
         .load(imageUrl)
         .placeholder(R.drawable.generic_poster)
 //        .resize(218, 312)
+        .into(view)
+}
+
+@BindingAdapter("bind:imageLogo")
+fun loadLogo(view: ImageView, imageUrl: String) {
+    if (imageUrl.isEmpty()) return
+
+    Picasso.get()
+        .load(imageUrl)
+        .centerInside()
+        .resizeDimen(R.dimen.logoSize, R.dimen.logoSize)
+        .placeholder(android.R.drawable.ic_media_play)
+        .noFade()
         .into(view)
 }

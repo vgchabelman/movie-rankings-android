@@ -85,6 +85,8 @@ class MainActivity : AppCompatActivity() {
                         isSearching = true
                         movieViewModel.searchMovies(it)
                     }
+
+                    movieList.smoothScrollToPosition(RecyclerView.SCROLLBAR_POSITION_DEFAULT)
                     return true
                 }
                 return true
