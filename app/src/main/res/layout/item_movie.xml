@@ -24,7 +24,8 @@
             bind:imageBg="@{movie.backgroundImage}"
             tools:background="@tools:sample/backgrounds/scenic"
             tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="0dp" />
+            tools:layout_editor_absoluteY="0dp"
+            android:contentDescription="@string/imagem_do_filme" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -88,7 +89,7 @@
             android:layout_height="163dp"
             android:layout_marginStart="16dp"
             android:adjustViewBounds="true"
-            android:contentDescription="@{movie.title}"
+            android:contentDescription="@{`Poster do filme ` + movie.title}"
             android:scaleType="centerCrop"
             android:transitionName="poster"
             app:layout_constraintBottom_toBottomOf="parent"

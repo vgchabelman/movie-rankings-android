@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Movie Rankings</string>
+    <string name="imagem_do_filme">Imagem do filme</string>
+    <string name="t_tulo_original">Título original:</string>
+    <string name="tagline">Tagline:</string>
+    <string name="lan_amento">Lançamento:</string>
+    <string name="g_neros">Gêneros:</string>
+    <string name="nota_m_dia">Nota média:</string>
+    <string name="n_votos">Nº votos:</string>
+    <string name="or_amento">Orçamento:</string>
+    <string name="website_oficial">Website Oficial:</string>
+    <string name="imdb">IMDB:</string>
+    <string name="popularidade">Popularidade:</string>
+    <string name="sinopse">Sinopse:</string>
 </resources>
