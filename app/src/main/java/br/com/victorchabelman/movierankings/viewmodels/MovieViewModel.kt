@@ -3,18 +3,21 @@ package br.com.victorchabelman.movierankings.viewmodels
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import br.com.victorchabelman.movierankings.di.scope.ActivityScope
 import br.com.victorchabelman.movierankings.model.Genre
 import br.com.victorchabelman.movierankings.model.GenreListContainer
 import br.com.victorchabelman.movierankings.model.Movie
 import br.com.victorchabelman.movierankings.model.MovieListContainer
-import br.com.victorchabelman.movierankings.remote.TmdbService
-import br.com.victorchabelman.movierankings.util.API_KEY
-import br.com.victorchabelman.movierankings.util.RetrofitUtils
+import br.com.victorchabelman.movierankings.repository.MovieRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class MovieViewModel() : ViewModel() {
+@ActivityScope
+class MovieViewModel
+@Inject
+constructor(var movieRepository: MovieRepository) : ViewModel() {
     val movies = MutableLiveData<List<Movie>>()
     val genres = ArrayList<Genre>()
     lateinit var noConnectionListener: INoConnectionWarn
@@ -22,9 +25,7 @@ class MovieViewModel() : ViewModel() {
     private var currentPage = 1
 
     fun loadTrendingMovies() {
-        val tmdbService = RetrofitUtils.retrofitInstance.create(TmdbService::class.java)
-
-        tmdbService.trendingMovies(API_KEY, "pt-BR").enqueue(object : Callback<MovieListContainer> {
+        movieRepository.getTrendingMovies().enqueue(object : Callback<MovieListContainer> {
             override fun onFailure(call: Call<MovieListContainer>, t: Throwable) {
                 Log.e("VGC", t.message)
             }
@@ -43,9 +44,7 @@ class MovieViewModel() : ViewModel() {
     }
 
     fun loadGenres() {
-        val tmdbService = RetrofitUtils.retrofitInstance.create(TmdbService::class.java)
-
-        tmdbService.genres(API_KEY, "pt-BR").enqueue(object : Callback<GenreListContainer> {
+        movieRepository.getGenres().enqueue(object : Callback<GenreListContainer> {
             override fun onFailure(call: Call<GenreListContainer>, t: Throwable) {
                 Log.e("VGC", t.message)
             }
@@ -70,62 +69,60 @@ class MovieViewModel() : ViewModel() {
         currentPage = 1
     }
 
-    fun loadPopularMovies(hasConnection : Boolean) {
-        if (!hasConnection)  {
+    fun loadPopularMovies(hasConnection: Boolean) {
+        if (!hasConnection) {
             noConnectionListener.onNoConnectionDetected()
             return
         }
 
-        val tmdbService = RetrofitUtils.retrofitInstance.create(TmdbService::class.java)
-
-        tmdbService.popularMovies(API_KEY, "pt-BR", currentPage).enqueue(object : Callback<MovieListContainer> {
-            override fun onFailure(call: Call<MovieListContainer>, t: Throwable) {
-                Log.e("VGC", t.message)
-            }
-
-            override fun onResponse(
-                call: Call<MovieListContainer>,
-                response: Response<MovieListContainer>
-            ) {
-                if (response.code() == 200) {
-                    val movieListContainer = response.body()!!
-
-                    movieListContainer.moviesList.forEach { movie ->
-                        movie.setupGenreText(genres = genres.map { it.id to it }.toMap())
-                    }
-                    movies.postValue(movieListContainer.moviesList)
+        movieRepository.getPopularMovies(currentPage)
+            .enqueue(object : Callback<MovieListContainer> {
+                override fun onFailure(call: Call<MovieListContainer>, t: Throwable) {
+                    Log.e("VGC", t.message)
                 }
-            }
-        })
+
+                override fun onResponse(
+                    call: Call<MovieListContainer>,
+                    response: Response<MovieListContainer>
+                ) {
+                    if (response.code() == 200) {
+                        val movieListContainer = response.body()!!
+
+                        movieListContainer.moviesList.forEach { movie ->
+                            movie.setupGenreText(genres = genres.map { it.id to it }.toMap())
+                        }
+                        movies.postValue(movieListContainer.moviesList)
+                    }
+                }
+            })
     }
 
-    fun searchMovies(query : String, hasConnection : Boolean) {
-        if (!hasConnection)  {
+    fun searchMovies(query: String, hasConnection: Boolean) {
+        if (!hasConnection) {
             noConnectionListener.onNoConnectionDetected()
             return
         }
 
-        val tmdbService = RetrofitUtils.retrofitInstance.create(TmdbService::class.java)
-
-        tmdbService.searchMovies(API_KEY, "pt-BR", currentPage, query).enqueue(object  : Callback<MovieListContainer> {
-            override fun onFailure(call: Call<MovieListContainer>, t: Throwable) {
-                Log.e("VGC", t.message)
-            }
-
-            override fun onResponse(
-                call: Call<MovieListContainer>,
-                response: Response<MovieListContainer>
-            ) {
-                if (response.code() == 200) {
-                    val movieListContainer = response.body()!!
-
-                    movieListContainer.moviesList.forEach { movie ->
-                        movie.setupGenreText(genres = genres.map { it.id to it }.toMap())
-                    }
-                    movies.postValue(movieListContainer.moviesList)
+        movieRepository.getMovies(page = currentPage, query = query)
+            .enqueue(object : Callback<MovieListContainer> {
+                override fun onFailure(call: Call<MovieListContainer>, t: Throwable) {
+                    Log.e("VGC", t.message)
                 }
-            }
-        })
+
+                override fun onResponse(
+                    call: Call<MovieListContainer>,
+                    response: Response<MovieListContainer>
+                ) {
+                    if (response.code() == 200) {
+                        val movieListContainer = response.body()!!
+
+                        movieListContainer.moviesList.forEach { movie ->
+                            movie.setupGenreText(genres = genres.map { it.id to it }.toMap())
+                        }
+                        movies.postValue(movieListContainer.moviesList)
+                    }
+                }
+            })
     }
 
     interface INoConnectionWarn {

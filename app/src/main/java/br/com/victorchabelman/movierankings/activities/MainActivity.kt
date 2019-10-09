@@ -15,23 +15,26 @@ import kotlinx.android.synthetic.main.activity_main.*
 import android.net.ConnectivityManager
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var movieAdapter: MovieAdapter
-    private lateinit var movieViewModel: MovieViewModel
+    @Inject
+    lateinit var movieViewModel: MovieViewModel
 
     private var shouldClear = false
     private var isSearching = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
 
         movieAdapter = MovieAdapter(this)
 
-        movieViewModel = ViewModelProviders.of(this).get(MovieViewModel::class.java)
         movieViewModel.noConnectionListener = object : MovieViewModel.INoConnectionWarn {
             override fun onNoConnectionDetected() {
                 AlertDialog.Builder(this@MainActivity)
