@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import android.net.ConnectivityManager
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
@@ -22,6 +23,8 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     private lateinit var movieAdapter: MovieAdapter
     @Inject
+    lateinit var viewModelFactory : ViewModelProvider.Factory
+
     lateinit var movieViewModel: MovieViewModel
 
     private var shouldClear = false
@@ -32,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+
+        movieViewModel = ViewModelProviders.of(this, viewModelFactory)[MovieViewModel::class.java]
 
         movieAdapter = MovieAdapter(this)
 

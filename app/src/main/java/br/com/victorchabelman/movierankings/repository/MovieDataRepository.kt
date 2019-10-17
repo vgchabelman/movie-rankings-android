@@ -6,7 +6,9 @@ import br.com.victorchabelman.movierankings.model.MovieListContainer
 import br.com.victorchabelman.movierankings.remote.TmdbService
 import retrofit2.Call
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class MovieDataRepository
 @Inject
 constructor(var movieService: TmdbService) : MovieRepository {

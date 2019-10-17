@@ -14,7 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-@ActivityScope
+//@ActivityScope
 class MovieViewModel
 @Inject
 constructor(var movieRepository: MovieRepository) : ViewModel() {
